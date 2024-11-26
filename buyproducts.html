@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buy Product</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    body {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      animation: slideBackground 20s infinite; /* Animate background */
+    }
+
+    /* Keyframe animation for slideshow effect */
+    @keyframes slideBackground {
+      0% {
+        background-image: url('image/veg2.jpg');
+      }
+      33% {
+        background-image: url('image/veg5.jpg');
+      }
+      66% {
+        background-image: url('image/veg3.jpg');
+      }
+      100% {
+        background-image: url('image/veg4.jpg');
+      }
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5); /* Optional overlay */
+      z-index: -1;
+    }
+     /* Caption styling at the top of the page */
+     .top-caption {
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px 0;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+    /* Container styling for the product form */
+    .container {
+      width: 80%;
+      max-width: 600px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      margin-top: 120px; /* Create space for the caption */
+    }
+
+    h1 {
+      color: #4CAF50;
+      font-size: 28px;
+      margin-bottom: 15px;
+    }
+
+    label {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+
+    input[type="number"]:focus {
+      border-color: #23c229;
+      outline: none;
+    }
+
+    input[type="submit"] {
+      width: 100%;
+      padding: 14px;
+      background-color: #23c229;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #1dc425;
+    }
+
+    p {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #e74c3c;
+    }
+    h1 {
+      color: #4CAF50;
+    }
+
+    .thought {
+      background-color: #e2f0e8;
+      border-left: 5px solid #4CAF50;
+      padding: 10px;
+      margin: 15px 0;
+      font-size: 1.2em;
+      color: #333;
+    }
+
+  
+  </style>
+</head>
+<body>
+  
+   <!-- Top Caption text -->
+   <div class="top-caption">Welcome to HarvestHub!!!Buy your own choice......</div>
+
+
+  <!-- Main container for the buy product form -->
+  <div class="container">
+    <h1>Buy Product</h1>
+    <form id="buy-product-form">
+      <label for="productId">Enter Product ID:</label>
+      <input type="number" id="productId" name="productId" required>
+      <input type="submit" value="Buy Product">
+    </form>
+    <p id="error-message"></p>
+  </div>
+  <div class="thought">
+    Farm-Fresh and Fair-Priced -- Direct from the Source
+
+  </div>
+
+  <script>
+    const buyProduct = async () => {
+        const productId = document.getElementById("productId").value;
+        if (!productId) {
+            document.getElementById("error-message").textContent = "Please provide a product ID.";
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:3000/buyProduct', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ productId: productId })
+            });
+            const result = await response.json();
+            alert(`Product purchased! Transaction hash:x5ed6866ee6ee208b982be05d6836c349c0979fe8526d31493c6bf2c3e15409a1`);
+            document.getElementById("buy-product-form").reset();
+        } catch (error) {
+            console.error('Error buying product:', error);
+            document.getElementById("error-message").textContent = 'Failed to buy product: ' + error.message;
+        }
+    };
+
+    document.getElementById("buy-product-form").addEventListener("submit", (e) => {
+        e.preventDefault();
+        buyProduct();
+    });
+  </script>
+
+</body>
+</html>
